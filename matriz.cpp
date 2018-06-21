@@ -13,9 +13,7 @@ using namespace cv;
 int matriz[filas][columnas];
 Scalar negro(0, 0, 0);
 Scalar blanco(255, 255, 255);
-//para indicar si se ha presionado dentro de la cuadricula
 bool bandera = false;
-//para indicar si se ha encontrado un jugador
 bool juegoTermino = false;
 
 int altoV = tam*columnas + espacio * 4;
@@ -42,8 +40,6 @@ void dibujarMatriz() {
 int main(int argc, char const *argv[])
 {
 	namedWindow("Ventana");
-	//setMouseCallback("Ventana", onMouse);//
-
 	dibujarMatriz();
 
 	while (true)
