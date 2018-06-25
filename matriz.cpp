@@ -19,7 +19,9 @@ Scalar negro(0, 0, 0);
 Scalar blanco(255, 255, 255);
 Scalar verde (0, 255, 0);
 bool bandera = false;
+bool zero = false;
 bool gameOver = false;
+bool turn = false; 
 
 int alto = tam*columnas + espacio * 9;
 int ancho = tam * filas + espacio * 2;
@@ -27,12 +29,12 @@ Mat ventana(alto, ancho, CV_8UC3, negro);
 
 
 void llenar(){
-    for(int a =0;a <= 7; a++){        //llenar con 0
-        for(int b = 0; b<=7; b++)  
+    for(int a =0;a < 8; a++){        //llenar con 0 ambos arreglos 
+        for(int b = 0; b<8; b++)  
             matriz[a][b] = 0;} 
-    for (int i=0; i<9;i++){
+    for (int i=0; i<8;i++){
     	bottom[i]=7;
-    }   
+    }
 }
 
 
@@ -76,7 +78,13 @@ void arr() {
         cout<<'\n';   
 	}}
 
-void Onmouse(int event, int x, int y, int, void*) {
+void dibujarMaru(int x, int y){
+	Point centro(x + tam / 2, y + tam / 2);
+	int radio = tam / 2 - espacio;
+	circle(ventana, centro, radio, (turn? verde:blanco)); }
+
+
+void Onmouse(int event, int x, int y, int, void*) {	
 // onmouse solo funciona para detectar el click, todavía falta hacer bien el movimiento de la matriz
 	if (event == EVENT_LBUTTONUP) 
 	{	for (int i =0; i<8;i++)
@@ -86,20 +94,34 @@ void Onmouse(int event, int x, int y, int, void*) {
 			int valor = tam*i + espacio;
 			if (x >= valor && x < valor + tam && y >= espacio && y <=tam + espacio) 
 			{
-				matriz[7][i]++;
-		if (bandera) {
-			arr();
-			bandera = false;}
+				x = tam * ((x - espacio) / tam) + espacio;
+				y = tam * ((y - espacio) / tam) + espacio;
+			/*	for (int s=0; s>=7;s++){
+					if (matriz[s][i]==0){
+					 	matriz[s][i]=(turn? 1:2);
+					 	break;}}*/
+				for (int s=7; s>=0;s--){
+					if (matriz[7][i]==0){
+					 	matriz[7][i]=(turn? 1:2);
+					 	dibujarMaru(x,y);
+					 	break;
+					}
+					else if (matriz[s][i]==0){
+					 matriz[s+1][i]=(turn? 1:2);
+					 break;
+					 dibujarMaru(x,y);
+					}
+				}
 
-	}	}}
-	}
-}
-
-void dibujarMaru(){
-
+	}			}
+		}
+	turn=!turn;
+}}
 
 
-}
+
+
+
 
 
 int main(int argc, char const *argv[]) {
@@ -107,15 +129,17 @@ int main(int argc, char const *argv[]) {
 	namedWindow("Ventana");
 
 	setMouseCallback("Ventana", Onmouse);
+	arr();
 	dibujarMatriz();
 	dibujarButtons();
-	
 
 	while (true)
 	{
 		imshow("Ventana", ventana);
 		if (waitKey(10) == 27) break;
 		arr();
+		
 	}
 	return 0;
 }
+
