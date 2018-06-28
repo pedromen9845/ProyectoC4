@@ -95,19 +95,17 @@ void Onmouse(int event, int x, int y, int, void*) {
 			int valor = tam*i + espacio;
 			if (x >= valor && x < valor + tam && y >= espacio && y <=tam + espacio) 
 			{
+			// x y y son valores necesarios para decirle donde se harán los circulos... TODAVIA NO SE HA CREADO EL CODIGO PARA QUE DIBUJE EL CODIGO EN EL CUADRO CORRECTO.
 			x = tam * ((x - espacio) / tam) + espacio;
 			y = tam * ((y - espacio) / tam) + espacio;
 
-				x0(i,x,y);
+			x0(i,x,y);
+			//Función x0 creada para que registre el click del boton en la matriz.
 
 	}			}
 		}
 	turn=!turn;
 }}
-
-
-
-
 
 
 
@@ -131,6 +129,7 @@ int main(int argc, char const *argv[]) {
 }
 
 void x0(int i, int x, int y){
+	// Esta parte no esta correctamente escrita, si detecta el turn, pero no lo coloca correctamente en la matriz.
 	for (int s=7; s>=0;s--){
 					if (matriz[7][i]==0){
 					 	matriz[7][i]=(turn? 1:2);
