@@ -13,7 +13,8 @@ using namespace cv;
 #define columnasB 8
 #define tamB 20
 
-int bottom[8];// es un arreglo que representa los puntos de la matriz.
+void x0(int, int, int);
+int bottom[8];
 int matriz[8][8];
 Scalar negro(0, 0, 0);
 Scalar blanco(255, 255, 255);
@@ -94,24 +95,10 @@ void Onmouse(int event, int x, int y, int, void*) {
 			int valor = tam*i + espacio;
 			if (x >= valor && x < valor + tam && y >= espacio && y <=tam + espacio) 
 			{
-				x = tam * ((x - espacio) / tam) + espacio;
-				y = tam * ((y - espacio) / tam) + espacio;
-			/*	for (int s=0; s>=7;s++){
-					if (matriz[s][i]==0){
-					 	matriz[s][i]=(turn? 1:2);
-					 	break;}}*/
-				for (int s=7; s>=0;s--){
-					if (matriz[7][i]==0){
-					 	matriz[7][i]=(turn? 1:2);
-					 	dibujarMaru(x,y);
-					 	break;
-					}
-					else if (matriz[s][i]==0){
-					 matriz[s+1][i]=(turn? 1:2);
-					 break;
-					 dibujarMaru(x,y);
-					}
-				}
+			x = tam * ((x - espacio) / tam) + espacio;
+			y = tam * ((y - espacio) / tam) + espacio;
+
+				x0(i,x,y);
 
 	}			}
 		}
@@ -143,3 +130,17 @@ int main(int argc, char const *argv[]) {
 	return 0;
 }
 
+void x0(int i, int x, int y){
+	for (int s=7; s>=0;s--){
+					if (matriz[7][i]==0){
+					 	matriz[7][i]=(turn? 1:2);
+					 	dibujarMaru(x,y);
+					 	break;
+					}
+					else if (matriz[s][i]==0){
+					 matriz[s+1][i]=(turn? 1:2);
+					 break;
+					 dibujarMaru(x,y);
+					}
+							}
+}
