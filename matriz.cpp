@@ -20,8 +20,8 @@ Scalar negro(0, 0, 0);
 Scalar blanco(255, 255, 255);
 Scalar verde (0, 255, 0);
 bool bandera = false;
-bool zero = false;
-bool gameOver = false;
+bool katsu = false;
+void check(int);
 bool turn = false; 
 
 int alto = tam*columnas + espacio * 9;
@@ -98,7 +98,7 @@ void Onmouse(int event, int x, int y, int, void*) {
 			// x y y son valores necesarios para decirle donde se harán los circulos... TODAVIA NO SE HA CREADO EL CODIGO PARA QUE DIBUJE EL CODIGO EN EL CUADRO CORRECTO.
 			x = tam * ((x - espacio) / tam) + espacio;
 			y = tam * ((y - espacio) / tam) + espacio;
-
+			
 			x0(i,x,y);
 			//Función x0 creada para que registre el click del boton en la matriz.
 
@@ -129,17 +129,36 @@ int main(int argc, char const *argv[]) {
 }
 
 void x0(int i, int x, int y){
-	// Esta parte no esta correctamente escrita, si detecta el turn, pero no lo coloca correctamente en la matriz.
-	for (int s=7; s>=0;s--){
-					if (matriz[7][i]==0){
+	// Esta parte no esta correctamente escrita, si detecta el click , pero no lo coloca correctamente en la matriz.
+	 int s=7;
+	 while (s>=0){
+	 	if (matriz[s][i]==0){
+	 		matriz[s][i]=(turn? 1:2);
+	 		dibujarMaru(x,y); 
+	 		break;
+	 	}
+	 	else if (matriz[s][i]!=0){
+	 		s--;
+	 	}
+	 }
+
+
+
+
+	/*for (int s=7; s>=0;s--)
+	{
+					if (matriz[7][i]==0)
+						{
 					 	matriz[7][i]=(turn? 1:2);
 					 	dibujarMaru(x,y);
 					 	break;
-					}
-					else if (matriz[s][i]==0){
-					 matriz[s+1][i]=(turn? 1:2);
-					 break;
-					 dibujarMaru(x,y);
-					}
-							}
+						}
+				
+	}*/
 }
+
+void check(int i){
+ if (matriz[7][0]==matriz[7][1])
+ 	 katsu=true;
+
+} 
