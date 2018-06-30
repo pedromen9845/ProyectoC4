@@ -15,29 +15,27 @@ using namespace cv;
 
 void x0(int, int, int);
 int bottom[8];
-int matriz[8][8];
+int tablero[8][8];
 Scalar negro(0, 0, 0);
 Scalar blanco(255, 255, 255);
 Scalar verde (0, 255, 0);
 bool bandera = false;
-bool katsu = false;
+bool endgame = false;
 void check(int);
 bool turn = false; 
 
-int alto = tam*columnas + espacio * 9;
-int ancho = tam * filas + espacio * 2;
+int alto = tam*columnas + espacio * 8.5;
+int ancho = tam *filas + espacio -2 ;
 Mat ventana(alto, ancho, CV_8UC3, negro);
 
 
 void llenar(){
     for(int a =0;a < 8; a++){        //llenar con 0 ambos arreglos 
         for(int b = 0; b<8; b++)  
-            matriz[a][b] = 0;} 
+            tablero[a][b] = 0;} 
     for (int i=0; i<8;i++){
     	bottom[i]=7;
-    }
-}
-
+    }}
 
 void dibujarButtons(){
 	//cuadros verdes en los cuales se trabajarán los botones, se deben hacer flechas verticales 
@@ -54,7 +52,7 @@ void dibujarButtons(){
 	}
 	}
 
-void dibujarMatriz() {
+void dibujartablero() {
 
 	for (int i = 0; i < filas + 1; i++)	
 	{
@@ -75,7 +73,7 @@ void arr() {
 	cout<<"1 2 3 4 5 6 7 8\n";
     for(int a = 0; a<= 7; a++)
     {
-        for(int b =0; b <= 7; b++) cout<<matriz[a][b]<<" ";
+        for(int b =0; b <= 7; b++) cout<<tablero[a][b]<<" ";
         cout<<'\n';   
 	}}
 
@@ -84,28 +82,63 @@ void dibujarMaru(int x, int y){
 	int radio = tam / 2 - espacio;
 	circle(ventana, centro, radio, (turn? verde:blanco)); }
 
+void kakuempate(){
+	Mat Empate(200, 400, CV_8UC3, blanco);
+    putText(Empate, "-Empate-", Point(100, 100), FONT_HERSHEY_SIMPLEX, 3, verde);
+    imshow("Empate", Empate);
 
-void Onmouse(int event, int x, int y, int, void*) {	
-// onmouse solo funciona para detectar el click, todavía falta hacer bien el movimiento de la matriz
-	if (event == EVENT_LBUTTONUP) 
-	{	for (int i =0; i<8;i++)
+    endgame = true;
+}
+
+void ganador(){
+
+}
+void Empate(){
+	int lleno=0;
+	for (int i = 0; i < filas; i++)
+        for (int j = 0; j < columnas; j++)
+            if (tablero[i][j] != 0) lleno++;
+if ( !endgame && lleno==64)kakuempate();
+
+}
+
+
+void onMouse(int event, int x, int y, int, void*) {
+	if (endgame) return;
+
+	if (event == EVENT_LBUTTONUP) {
+		for (int i = 0; i < filas; i++)
 		{
-			for (int i = 0; i < filas; i++)
-			{
 			int valor = tam*i + espacio;
-			if (x >= valor && x < valor + tam && y >= espacio && y <=tam + espacio) 
-			{
-			// x y y son valores necesarios para decirle donde se harán los circulos... TODAVIA NO SE HA CREADO EL CODIGO PARA QUE DIBUJE EL CODIGO EN EL CUADRO CORRECTO.
-			x = tam * ((x - espacio) / tam) + espacio;
-			y = tam * ((y - espacio) / tam) + espacio;
-			
-			x0(i,x,y);
-			//Función x0 creada para que registre el click del boton en la matriz.
-
-	}			}
+			if (x >= valor && x < valor + tam && y >= espacio && y <=tam + espacio) {
+				int s=7;
+				x = tam * ((x - espacio) / tam) + espacio;
+                y = tam * ((y - espacio) / tam) + espacio;
+				while (s>=0){
+	 				if (tablero[s][i]==0){
+	 					tablero[s][i]=(turn? 1:2);
+	 					dibujarMaru(x,y);
+	 					turn=!turn;
+	 					break;
+	 						}
+	 				else if (tablero[s][i]!=0){
+	 					s--;
+	 						}
+	 						}
+				bandera = true;
+			}
 		}
-	turn=!turn;
-}}
+		ganador();
+		Empate();
+
+
+		if (bandera) {
+			arr();
+			bandera = false;
+		}
+	}
+}
+
 
 
 
@@ -113,52 +146,23 @@ int main(int argc, char const *argv[]) {
 
 	namedWindow("Ventana");
 
-	setMouseCallback("Ventana", Onmouse);
+	setMouseCallback("Ventana", onMouse);
 	arr();
-	dibujarMatriz();
+	dibujartablero();
 	dibujarButtons();
 
 	while (true)
 	{
 		imshow("Ventana", ventana);
 		if (waitKey(10) == 27) break;
-		arr();
 		
 	}
 	return 0;
 }
 
-void x0(int i, int x, int y){
-	// Esta parte no esta correctamente escrita, si detecta el click , pero no lo coloca correctamente en la matriz.
-	 int s=7;
-	 while (s>=0){
-	 	if (matriz[s][i]==0){
-	 		matriz[s][i]=(turn? 1:2);
-	 		dibujarMaru(x,y); 
-	 		break;
-	 	}
-	 	else if (matriz[s][i]!=0){
-	 		s--;
-	 	}
-	 }
-
-
-
-
-	/*for (int s=7; s>=0;s--)
-	{
-					if (matriz[7][i]==0)
-						{
-					 	matriz[7][i]=(turn? 1:2);
-					 	dibujarMaru(x,y);
-					 	break;
-						}
-				
-	}*/
-}
 
 void check(int i){
- if (matriz[7][0]==matriz[7][1])
- 	 katsu=true;
+ if (tablero[7][0]==tablero[7][1])
+ 	 endgame=true;
 
 } 
