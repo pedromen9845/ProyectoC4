@@ -13,15 +13,17 @@ using namespace cv;
 #define columnasB 8
 #define tamB 20
 
+int m=1;
 void x0(int, int, int);
-int bottom[8];
 int tablero[8][8];
 Scalar negro(0, 0, 0);
 Scalar blanco(255, 255, 255);
 Scalar verde (0, 255, 0);
+Scalar rojo (0,0,255);
 bool bandera = false;
 bool endgame = false;
 void check(int);
+void DibujarJuego();
 bool turn = false; 
 
 int alto = tam*columnas + espacio * 8.5;
@@ -32,10 +34,8 @@ Mat ventana(alto, ancho, CV_8UC3, negro);
 void llenar(){
     for(int a =0;a < 8; a++){        //llenar con 0 ambos arreglos 
         for(int b = 0; b<8; b++)  
-            tablero[a][b] = 0;} 
-    for (int i=0; i<8;i++){
-    	bottom[i]=7;
-    }}
+            tablero[a][b] = 0;}  
+    }
 
 void dibujarButtons(){
 	//cuadros verdes en los cuales se trabajarán los botones, se deben hacer flechas verticales 
@@ -105,12 +105,12 @@ if ( !endgame && lleno==64)kakuempate();
 
 void onMouse(int event, int x, int y, int, void*) {
 	if (endgame) return;
-
-	if (event == EVENT_LBUTTONUP) {
-		for (int i = 0; i < filas; i++)
-		{
-			int valor = tam*i + espacio;
-			if (x >= valor && x < valor + tam && y >= espacio && y <=tam + espacio) {
+	if(m==0){
+		if (event == EVENT_LBUTTONUP) {
+			for (int i = 0; i < filas; i++)
+			{
+				int valor = tam*i + espacio;
+				if (x >= valor && x < valor + tam && y >= espacio && y <=tam + espacio) {
 				int s=7;
 				x = tam * ((x - espacio) / tam) + espacio;
                 y = tam * ((y - espacio) / tam) + espacio;
@@ -136,10 +136,73 @@ void onMouse(int event, int x, int y, int, void*) {
 			arr();
 			bandera = false;
 		}
+	}}
+	else if (m==1){
+		if (event==EVENT_LBUTTONUP){
+			int valor = 74 ;
+				if (x >= 75 && x < 314 && y >= 62 && y <=250) {
+					m=0;
+					DibujarJuego();
+				}
+				else if(x>=75 && x<314 && y>=156 && y <=230){
+					m=0;
+					DibujarJuego(); 
+					//Aquí irá la pantalla de puntuaciones, todavía no está hecha!
+				}
+		}
+
+	}
+
+}
+
+
+
+//CODIGO DE AQÚI EN ADELANTE ES SOBRE EL MENU!!!!!
+void dibujarBmenu(Mat Menu){
+	putText(Menu, "-Conect 4-", Point(10,50), FONT_HERSHEY_SCRIPT_SIMPLEX, 2, verde);
+    //imshow("Empate", Menu);
+	
+	Rect recPlay (75,63,240,73); 
+	rectangle(Menu, recPlay,rojo, CV_FILLED);
+	putText(Menu,"Jugar!",Point(105,115), FONT_HERSHEY_SIMPLEX,2,blanco);
+	Rect recScore (75,158,240,73);
+	rectangle(Menu, recScore,rojo,CV_FILLED); 
+	putText(Menu,"Puntuacion",Point(81,215), FONT_HERSHEY_SIMPLEX,1.3,blanco);
+}
+
+
+
+void Menu(){
+	Mat Menu (400,400,CV_8UC3,negro);
+	namedWindow("Ventana");
+	int option=0;
+	dibujarBmenu(Menu);
+	setMouseCallback("Ventana", onMouse);
+
+
+	while (option==0)
+	{
+		imshow("Ventana", Menu);
+		if (waitKey(10) == 27) break;
+		
 	}
 }
 
 
+int main(int argc, char const *argv[]) {
+	
+	Menu();
+	//DibujarJuego();
+
+	
+}
+
+
+void check(int i){
+ if (tablero[7][0]==tablero[7][1])
+ 	 endgame=true;
+
+} 
 
 void DibujarJuego(){
 	namedWindow("Ventana");
@@ -152,62 +215,9 @@ void DibujarJuego(){
 	while (true)
 	{
 		imshow("Ventana", ventana);
-		if (waitKey(10) == 27) break;
+		if (waitKey(10) == 27) {break;
+		break;}
 		
 	}
 
 }
-//CODIGO DE AQÚI EN ADELANTE ES SOBRE EL MENU!!!!!
-void dibujarBmenu(){
-
-	Point inicio1(espacio, espacio);
-	Point fin1(tam * 6 + espacio, espacio);
-	line(ventana, inicio1, fin1, blanco);
-
-	//dibujar borde horizontal inferior
-	Point inicio2(espacio, tam + espacio);
-	Point fin2(tam * 6 + espacio, tam + espacio);
-	line(ventana, inicio2, fin2, blanco);
-
-	//dibujar bordes verticales
-	for (int i = 0; i < filas + 1; i++)
-	{
-		Point inicio3(tam * i + espacio, espacio);
-		Point fin3(tam * i + espacio, tam + espacio);
-		line(ventana, inicio3, fin3, blanco);
-	}
-
-}
-void MouseMenu(){
-	return;
-};
-/*
-void Menu(){
-	namedWindow("Ventana");
-	int option=0;
-	dibujarBmenu();
-	setMouseCallback("Ventana", MouseMenu);
-
-	while (option==0)
-	{
-		imshow("Ventana", ventana);
-		if (waitKey(10) == 27) break;
-		
-	}
-}
-*/
-
-int main(int argc, char const *argv[]) {
-	
-	//Menu();
-	DibujarJuego();
-
-	
-}
-
-
-void check(int i){
- if (tablero[7][0]==tablero[7][1])
- 	 endgame=true;
-
-} 
