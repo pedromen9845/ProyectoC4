@@ -1,5 +1,8 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
+#include <string>
+#include <fstream>
+	
 using namespace std;
 using namespace cv;
 
@@ -13,8 +16,9 @@ using namespace cv;
 #define columnasB 8
 #define tamB 20
 
-string J1;
-int m=1;
+string J1nombre,J2nombre,J1alias,J2alias;
+char temp;
+int m=1, dat=4;
 void x0(int, int, int);
 int tablero[8][8];
 Scalar negro(0, 0, 0);
@@ -31,6 +35,7 @@ bool turn = false;
 int alto = tam*columnas + espacio * 8.5;
 int ancho = tam *filas + espacio -2 ;
 Mat ventana(alto, ancho, CV_8UC3, negro);
+Mat Ins(400,400, CV_8UC3, negro);
 
 //CODIGO DE AQUÍ EN ADELANTE ES ACERCA DEL JUEGO CONECT4 
 void llenar(){
@@ -157,19 +162,64 @@ void onMouse(int event, int x, int y, int, void*) {
 		}
 
 	}
+	//Para ingreso de Datos
 	else if (m==2){
 		if (event==EVENT_LBUTTONUP){
 			if(x>=110 && x<383 && y>=65 && y<=95){
-				getline(cin,J1);
-			}
+				cout<<"cuadro de nombre"<<endl;
+				
+				if (waitKey()){
+					while (true){
+						if(J1nombre.length()==5 or waitKey()==13)break;
 
-		}
-		if (bandera) {
-			cout<<J1<<endl;
-			bandera = false;}
-	}
+							temp=waitKey();
+							J1nombre+=temp;
+							putText(Ins,"-"+J1nombre,Point(115,90), FONT_HERSHEY_SIMPLEX,1,rojo);
+							cout<<J1nombre<<endl;
+					}}}
+			else if (x>=110 && x<383 && y>=125 && y<=155)	{
+				cout<<"cuadro de alias"<<endl;
+				
+					if (waitKey()){
+						while (true){
+							if(J1alias.length()==5 or waitKey()==13)break;
 
-}
+							temp=waitKey();
+							J1alias+=temp;
+							putText(Ins,"-"+J1alias,Point(115,150), FONT_HERSHEY_SIMPLEX,1,rojo);
+							cout<<J1alias<<endl;
+
+				}
+				}		
+							}
+			else if(x>=110 && x<383 && y>=245 && y<=275){
+				cout<<"cuadro de nombre"<<endl;
+				
+				if (waitKey()){
+					while (true){
+						if(J2nombre.length()==5 or waitKey()==13)break;
+
+							temp=waitKey();
+							J2nombre+=temp;
+							putText(Ins,"-"+J2nombre,Point(115,270), FONT_HERSHEY_SIMPLEX,1,rojo);
+							cout<<J2nombre<<endl;
+					}}}	
+			else if (x>=110 && x<383 && y>=125 && y<=155)	{
+				cout<<"cuadro de alias"<<endl;
+				
+					if (waitKey()){
+						while (true){
+							if(J1alias.length()==5 or waitKey()==13)break;
+
+							temp=waitKey();
+							J2alias+=temp;
+							putText(Ins,"-"+J2alias,Point(115,150), FONT_HERSHEY_SIMPLEX,1,rojo);
+							cout<<J1alias<<endl;
+
+				}
+				}		
+
+}}}
 
 
 
@@ -245,7 +295,7 @@ void check(int i){
 } 
 
 void datos(){
-	Mat Ins(400,400, CV_8UC3, negro);
+	
 	namedWindow("Ventana");
 	Dibujarinscrip(Ins);
 
