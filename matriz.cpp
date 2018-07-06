@@ -13,6 +13,7 @@ using namespace cv;
 #define columnasB 8
 #define tamB 20
 
+string J1;
 int m=1;
 void x0(int, int, int);
 int tablero[8][8];
@@ -24,6 +25,7 @@ bool bandera = false;
 bool endgame = false;
 void check(int);
 void DibujarJuego();
+void datos();
 bool turn = false; 
 
 int alto = tam*columnas + espacio * 8.5;
@@ -83,8 +85,8 @@ void dibujarMaru(int x, int y){
 	circle(ventana, centro, radio, (turn? verde:blanco)); }
 
 void kakuempate(){
-	Mat Empate(200, 400, CV_8UC3, blanco);
-    putText(Empate, "-Empate-", Point(100, 100), FONT_HERSHEY_SIMPLEX, 3, verde);
+	Mat Empate(200, 500, CV_8UC3, blanco);
+    putText(Empate, "-Empate-", Point(5, 100), FONT_HERSHEY_SIMPLEX, 3, verde);
     imshow("Empate", Empate);
 
     endgame = true;
@@ -135,22 +137,36 @@ void onMouse(int event, int x, int y, int, void*) {
 		if (bandera) {
 			arr();
 			bandera = false;
+			//cout<<m<<endl;
 		}
 	}}
+	//Para el menu
 	else if (m==1){
 		if (event==EVENT_LBUTTONUP){
-			int valor = 74 ;
-				if (x >= 75 && x < 314 && y >= 62 && y <=250) {
-					m=0;
-					DibujarJuego();
+			
+				if (x >= 75 && x < 314 && y >= 62 && y <=135) {
+					m=2;
+					datos();
+
 				}
-				else if(x>=75 && x<314 && y>=156 && y <=230){
+				else if(x>=75 && x< 314 && y>=155 && y <=230){
 					m=0;
 					DibujarJuego(); 
 					//Aquí irá la pantalla de puntuaciones, todavía no está hecha!
 				}
 		}
 
+	}
+	else if (m==2){
+		if (event==EVENT_LBUTTONUP){
+			if(x>=110 && x<383 && y>=65 && y<=95){
+				getline(cin,J1);
+			}
+
+		}
+		if (bandera) {
+			cout<<J1<<endl;
+			bandera = false;}
 	}
 
 }
@@ -163,11 +179,11 @@ void dibujarBmenu(Mat Menu){
     //imshow("Empate", Menu);
 	
 	Rect recPlay (75,63,240,73); 
-	rectangle(Menu, recPlay,rojo, CV_FILLED);
-	putText(Menu,"Jugar!",Point(105,115), FONT_HERSHEY_SIMPLEX,2,blanco);
+		rectangle(Menu, recPlay,rojo, CV_FILLED);
+		putText(Menu,"Jugar!",Point(105,115), FONT_HERSHEY_SIMPLEX,2,blanco);
 	Rect recScore (75,158,240,73);
-	rectangle(Menu, recScore,rojo,CV_FILLED); 
-	putText(Menu,"Puntuacion",Point(81,215), FONT_HERSHEY_SIMPLEX,1.3,blanco);
+		rectangle(Menu, recScore,rojo,CV_FILLED); 
+		putText(Menu,"Puntuacion",Point(81,210), FONT_HERSHEY_SIMPLEX,1.3,blanco);
 }
 
 
@@ -180,13 +196,37 @@ void Menu(){
 	setMouseCallback("Ventana", onMouse);
 
 
-	while (option==0)
+	while (m==1)
 	{
 		imshow("Ventana", Menu);
-		if (waitKey(10) == 27) break;
+		if (waitKey(10) == 27) 
+			break;
 		
 	}
 }
+//A PARTIR DE ACÁ SE USARÁ CODIGO DE EL SISTEMA DE INSCRIPCIÓN
+void Dibujarinscrip(Mat Ins){
+	putText(Ins,"Jugador 1", Point(10,30), FONT_HERSHEY_SIMPLEX,0.7,blanco);
+	
+	putText(Ins,"Nombre: ", Point(10,85), FONT_HERSHEY_SIMPLEX,0.7,blanco);
+		Rect recNamae1 (110,65,275,30); 
+		rectangle(Ins, recNamae1,blanco,CV_FILLED);
+	putText(Ins,"Alias: ", Point(10,145), FONT_HERSHEY_SIMPLEX,0.7,blanco);
+		Rect recAlias1 (110,125,275,30);
+		rectangle(Ins,recAlias1,blanco,CV_FILLED);
+
+	putText(Ins,"Jugador 2", Point(10,210), FONT_HERSHEY_SIMPLEX,0.7,blanco);
+	
+	putText(Ins,"Nombre: ", Point(10,265), FONT_HERSHEY_SIMPLEX,0.7,blanco);
+		Rect recNamae2 (110,245,275,30); 
+		rectangle(Ins, recNamae2,blanco,CV_FILLED);
+	putText(Ins,"Alias: ", Point(10,325), FONT_HERSHEY_SIMPLEX,0.7,blanco);
+		Rect recAlias2 (110,305,275,30);
+		rectangle(Ins,recAlias2,blanco,CV_FILLED);
+
+}
+
+
 
 
 int main(int argc, char const *argv[]) {
@@ -204,6 +244,18 @@ void check(int i){
 
 } 
 
+void datos(){
+	Mat Ins(400,400, CV_8UC3, negro);
+	namedWindow("Ventana");
+	Dibujarinscrip(Ins);
+
+	while(true){
+		imshow("Ventana",Ins);
+			if(waitKey(10)==27) 
+			break;
+	}
+
+}
 void DibujarJuego(){
 	namedWindow("Ventana");
 
