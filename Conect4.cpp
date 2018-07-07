@@ -204,20 +204,25 @@ void onMouse(int event, int x, int y, int, void*) {
 							putText(Ins,"-"+J2nombre,Point(115,270), FONT_HERSHEY_SIMPLEX,1,rojo);
 							cout<<J2nombre<<endl;
 					}}}	
-			else if (x>=110 && x<383 && y>=125 && y<=155)	{
+			else if (x>=110 && x<383 && y>=305 && y<=335)	{
 				cout<<"cuadro de alias"<<endl;
 				
 					if (waitKey()){
 						while (true){
-							if(J1alias.length()==5 or waitKey()==13)break;
+							if(J2alias.length()==5 or waitKey()==13)break;
 
 							temp=waitKey();
 							J2alias+=temp;
-							putText(Ins,"-"+J2alias,Point(115,150), FONT_HERSHEY_SIMPLEX,1,rojo);
+							putText(Ins,"-"+J2alias,Point(115,330), FONT_HERSHEY_SIMPLEX,1,rojo);
 							cout<<J1alias<<endl;
 
 				}
-				}		
+				}	
+				}
+			else if (x>=120 && x<=355 && y>=355 && y<=390)	{
+				m=0;
+				DibujarJuego();
+			}
 
 }}}
 
@@ -273,6 +278,11 @@ void Dibujarinscrip(Mat Ins){
 	putText(Ins,"Alias: ", Point(10,325), FONT_HERSHEY_SIMPLEX,0.7,blanco);
 		Rect recAlias2 (110,305,275,30);
 		rectangle(Ins,recAlias2,blanco,CV_FILLED);
+
+		Rect Juego(120,355,155,35);
+		rectangle(Ins,Juego,rojo,CV_FILLED);
+	putText(Ins, "Iniciar Juego!",Point(125,380), FONT_HERSHEY_SIMPLEX, 0.7, verde);
+		
 
 }
 
