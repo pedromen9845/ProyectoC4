@@ -27,7 +27,7 @@ Scalar verde (0, 255, 0);
 Scalar rojo (0,0,255);
 bool bandera = false;
 bool endgame = false;
-void check(int);
+void check();
 void DibujarJuego();
 void datos();
 bool turn = false; 
@@ -135,8 +135,9 @@ void onMouse(int event, int x, int y, int, void*) {
 				bandera = true;
 			}
 		}
-		ganador();
+		//ganador();
 		Empate();
+		//check();
 
 
 		if (bandera) {
@@ -160,7 +161,7 @@ void onMouse(int event, int x, int y, int, void*) {
 					//Aquí irá la pantalla de puntuaciones, todavía no está hecha!
 				}
 		}
-
+//sit
 	}
 	//Para ingreso de Datos
 	else if (m==2){
@@ -219,7 +220,7 @@ void onMouse(int event, int x, int y, int, void*) {
 				}
 				}	
 				}
-			else if (x>=120 && x<=355 && y>=355 && y<=390)	{
+			else if (x>=120 && x<=355 && y>=355 && y<=390 && J1nombre.length()!=0 && J2nombre.length()!=0 && J1alias.length()!=0 && J2alias.length()!=0 )	{
 				m=0;
 				DibujarJuego();
 			}
@@ -254,7 +255,7 @@ void Menu(){
 	while (m==1)
 	{
 		imshow("Ventana", Menu);
-		if (waitKey(10) == 27) 
+		if (waitKey(5) == 27) 
 			break;
 		
 	}
@@ -298,11 +299,10 @@ int main(int argc, char const *argv[]) {
 }
 
 
-void check(int i){
- if (tablero[7][0]==tablero[7][1])
- 	 endgame=true;
 
-} 
+ void check (){
+ 
+    }
 
 void datos(){
 	
@@ -311,7 +311,7 @@ void datos(){
 
 	while(true){
 		imshow("Ventana",Ins);
-			if(waitKey(10)==27) 
+			if(waitKey(5)==27) 
 			break;
 	}
 
